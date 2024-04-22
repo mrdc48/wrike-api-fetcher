@@ -36,7 +36,8 @@
                tasks.forEach(task => {
                  const taskDiv = document.createElement('div');
                  taskDiv.innerHTML = `
-                   <h3>${task.title}</h3>
+                   <h3>${task.title}</h3> 
+                   <p>ID: ${task.id}</p>
                    <p>Status: ${task.status}</p> 
                  `;
                  tasksContainer.appendChild(taskDiv);
