@@ -35,29 +35,34 @@
         .catch(error => console.error('Error fetching tasks:', error));
     }
 
-    function displayTasks(tasks, containerId) {
-      const tasksContainer = document.getElementById(containerId); 
-      tasksContainer.innerHTML = ''; 
+function displayTasks(tasksData, containerId) {
+   const tasksContainer = document.getElementById(containerId); 
+   tasksContainer.innerHTML = ''; 
 
-      tasks.forEach(task => {
-        const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task-item');
+   tasksData.forEach(task => { 
+    const taskDiv = document.createElement('div');
+    taskDiv.classList.add('task-item');
 
-        const titleElement = document.createElement('h3');
-        titleElement.textContent = task.title;
-        taskDiv.appendChild(titleElement);
+    const titleElement = document.createElement('h3');
+    titleElement.textContent = task.title;
+    taskDiv.appendChild(titleElement);
 
-        const statusElement = document.createElement('p');
-        statusElement.textContent = `Status: ${task.status}`;
-        taskDiv.appendChild(statusElement);
+    const statusElement = document.createElement('p');
+    statusElement.textContent = `Status: ${task.status}`;
+    taskDiv.appendChild(statusElement);
 
-        const assignedToElement = document.createElement('p');
-        assignedToElement.textContent = `Assigned To: ${task.responsibles.map(r => r.name).join(', ')}`;
-        taskDiv.appendChild(assignedToElement);
-
-        tasksContainer.appendChild(taskDiv);
-      });
+    const assignedToElement = document.createElement('p');
+    if (task.responsibles && task.responsibles.length > 0) {
+        assignedToElement.textContent = `Assigned To: ${task.responsibles.map(r => r.name).join(', ')}`;
+    } else {
+        assignedToElement.textContent = 'Assigned To: None';
     }
+    taskDiv.appendChild(assignedToElement);
+
+    tasksContainer.appendChild(taskDiv);
+   });
+  }
+
   </script>
 </body>
 </html>
