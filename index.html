@@ -18,14 +18,11 @@
   <h1>In Progress Tasks</h1>
   <div id="in-progress-tasks"></div> 
 
-  <h1>Tasks Awaiting Review</h1>
-  <div id="review-tasks"></div> 
 
   <script>
     function fetchTasks() {
       const apiToken = document.getElementById('apiToken').value; 
       fetchTasksByStatus('Active', 'in-progress-tasks', apiToken); 
-      fetchTasksByStatus('Review', 'review-tasks', apiToken); 
     }
 
     function fetchTasksByStatus(status, containerId, apiToken) {
