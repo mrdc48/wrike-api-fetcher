@@ -11,6 +11,10 @@
   </style>
 </head>
 <body>
+  <label for="apiToken">Enter your Wrike API bearer token:</label>
+  <input type="text" id="apiToken" name="apiToken"><br><br>
+  <button onclick="fetchTasks()">Fetch Tasks</button>
+
   <h1>In Progress Tasks</h1>
   <div id="in-progress-tasks"></div> 
 
@@ -18,8 +22,13 @@
   <div id="review-tasks"></div> 
 
   <script>
-    function fetchTasksByStatus(status, containerId) {
-      const apiToken = 'your_api_token'; 
+    function fetchTasks() {
+      const apiToken = document.getElementById('apiToken').value; 
+      fetchTasksByStatus('Active', 'in-progress-tasks', apiToken); 
+      fetchTasksByStatus('Review', 'review-tasks', apiToken); 
+    }
+
+    function fetchTasksByStatus(status, containerId, apiToken) {
       const endpoint = `https://www.wrike.com/api/v4/tasks?status=${status}`; 
       const headers = { 'Authorization': `Bearer ${apiToken}` };
 
@@ -52,9 +61,6 @@
         tasksContainer.appendChild(taskDiv);
       });
     }
-
-    fetchTasksByStatus('Active', 'in-progress-tasks'); 
-    fetchTasksByStatus('Review', 'review-tasks'); 
   </script>
 </body>
 </html>
