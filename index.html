@@ -1,66 +1,50 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Wrike Task Display</title>
-  <style>
-    .task-item {
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-      padding: 15px;
-    }
-  </style>
-</head>
-<body>
-  <label for="apiToken">Enter your Wrike API bearer token:</label>
-  <input type="text" id="apiToken" name="apiToken"><br><br>
-  <button onclick="fetchTasks()">Fetch Tasks</button>
+    <head>
+        <title>Wrike Task Display</title>
+        <style>
+            #wrike-tasks-container div {
+                border: 1px solid #ccc;
+                margin-bottom: 10px;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+      <h1>Wrike's API fetcher is in progress</h1>
+<label for="apiToken">Enter your Wrike API bearer token:</label>
+<input type="text" id="apiToken" name="apiToken"><br><br>
+<button onclick="fetchWrikeTasks()">Fetch Tasks</button>
+<div id="wrike-tasks-container"></div>
 
-  <h1>In Progress Tasks</h1>
-  <div id="in-progress-tasks"></div> 
-
-  <h1>Tasks Awaiting Review</h1>
-  <div id="review-tasks"></div> 
-
-  <script>
-    function fetchTasks() {
-      const apiToken = document.getElementById('apiToken').value; 
-      fetchTasksByStatus('Active', 'in-progress-tasks', apiToken); 
-      fetchTasksByStatus('Review', 'review-tasks', apiToken); 
-    }
-
-    function fetchTasksByStatus(status, containerId, apiToken) {
-      const endpoint = `https://www.wrike.com/api/v4/tasks?status=${status}`; 
-      const headers = { 'Authorization': `Bearer ${apiToken}` };
-
-      fetch(endpoint, { headers })
-        .then(response => response.json())
-        .then(data => displayTasks(data.data, containerId))
-        .catch(error => console.error('Error fetching tasks:', error));
-    }
-
-    function displayTasks(tasks, containerId) {
-      const tasksContainer = document.getElementById(containerId); 
-      tasksContainer.innerHTML = ''; 
-
-      tasks.forEach(task => {
-        const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task-item');
-
-        const titleElement = document.createElement('h3');
-        titleElement.textContent = task.title;
-        taskDiv.appendChild(titleElement);
-
-        const statusElement = document.createElement('p');
-        statusElement.textContent = `Status: ${task.status}`;
-        taskDiv.appendChild(statusElement);
-
-        const assignedToElement = document.createElement('p');
-        assignedToElement.textContent = `Assigned To: ${task.responsibles.map(r => r.name).join(', ')}`;
-        taskDiv.appendChild(assignedToElement);
-
-        tasksContainer.appendChild(taskDiv);
-      });
-    }
-  </script>
-</body>
+        <script>
+            function fetchWrikeTasks() {
+              const apiToken = document.getElementById('apiToken').value;
+              const endpoint = `https://www.wrike.com/api/v4/tasks`;
+                const headers = { Authorization: `Bearer ${apiToken}` };
+                fetch(endpoint, { headers })
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error("Error fetching tasks");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        const tasks = data.data;
+                        const tasksContainer = document.getElementById("wrike-tasks-container");
+                        tasksContainer.innerHTML = "";
+                        // Clear existing content
+                        tasks.forEach((task) => {
+                            const taskDiv = document.createElement("div");
+                            taskDiv.innerHTML = ` <h3>${task.title}</h3>  <p>ID: ${task.id}</p> <p>Status: ${task.status}</p>  `;
+                            tasksContainer.appendChild(taskDiv);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching data:", error);
+                    });
+            }
+            // Call the function to fetch data when the page loads fetchWrikeTasks();
+        </script>
+    </body>
 </html>
